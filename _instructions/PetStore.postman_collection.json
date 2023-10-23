@@ -1,0 +1,3121 @@
+{
+	"info": {
+		"_postman_id": "edf7f281-cfd2-4327-bc42-e055a3fe79e4",
+		"name": "PetStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27937711"
+	},
+	"item": [
+		{
+			"name": "Pet",
+			"item": [
+				{
+					"name": "CreatePet",
+					"item": [
+						{
+							"name": "TestPet-TC1 Create Pet - with all items from the request returned",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.globals.set('petId', Math.floor(Math.random() * 100000));\r",
+											"pm.globals.set('categoryName', 'string');"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Verify Id\r",
+											"pm.test(\"Verify Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.eql(parseInt(pm.variables.get(\"petId\")));\r",
+											"});\r",
+											"\r",
+											"//Check Category\r",
+											"pm.test(\"Category Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.category.id).to.eql(0);\r",
+											"});\r",
+											"pm.test(\"Category Name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.category.name).to.eql(pm.variables.get(\"categoryName\"));\r",
+											"});\r",
+											"\r",
+											"//Check Name\r",
+											"pm.test(\"Pet Name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.name).to.eql(pm.variables.get(\"name\"));\r",
+											"});\r",
+											"\r",
+											"//Check PhotoUrls\r",
+											"pm.test(\"PhotoUrls\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.photoUrls).to.include('string');\r",
+											"});\r",
+											"\r",
+											"//Check Tags\r",
+											"pm.test(\"Tags Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.tags[0].id).to.eql(0);\r",
+											"});\r",
+											"pm.test(\"Tags Name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.tags[0].name).to.eql('string');\r",
+											"});\r",
+											"\r",
+											"//Check Status\r",
+											"pm.test(\"Status\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql('available');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": {{petId}},\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"{{categoryName}}\"\r\n    },\r\n    \"name\": \"{{name}}\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CreatePet - Negative",
+					"item": [
+						{
+							"name": "TestPet-NegTC1 Create Pet using invalid Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Note: unhandled exceptions\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC2 Create Pet without Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC3 Create Pet using invalid Category Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"category\": {\r\n        \"id\": \"6a\",\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC4 Create Pet without Category Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"category\": {\r\n\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC5 Create Pet using invalid Category Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"##*&0\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC6 Create Pet using empty Category Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC7 Create Pet without Category Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0\r\n        \r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC8 Create Pet using invalid Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"##*97\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC9 Create Pet using empty Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC10 Create Pet without Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    }\r\n\r\n    \"photoUrls\": [\r\n        \"#**&320\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC11 Create Pet using invalid Tags Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": \"3a&\",\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC12 Create Pet without Tags Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC13 Create Pet using invalid Tags Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"##%&92\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC14 Create Pet without Tags Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0\r\n          \r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC15 Create Pet using invalid status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"##&*08\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC16 Create Pet without Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"qa01\",\r\n    \"category\": {\r\n        \"id\": 0,\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"doggie\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": 0,\r\n            \"name\": \"string\"\r\n        }\r\n    ]\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "UpdatePet",
+					"item": [
+						{
+							"name": "TestPet-TC1 Update existing Pet - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Check Response\r",
+											"pm.test(\"Code\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"});\r",
+											"pm.test(\"Type\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.not.eql(undefined);\r",
+											"});\r",
+											"pm.test(\"Message\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.not.eql(undefined);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/merge-patch+json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "petId",
+											"value": "{{petId}}",
+											"type": "default"
+										},
+										{
+											"key": "name",
+											"value": "{{name}}",
+											"type": "default"
+										},
+										{
+											"key": "status",
+											"value": "available",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/{{petId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										"{{petId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "UpdatePet - Negative",
+					"item": [
+						{
+							"name": "TestPet-NegTC1 Update existing Pet - using invalid Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/merge-patch+json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "petId",
+											"value": "{{petId}}",
+											"type": "default"
+										},
+										{
+											"key": "name",
+											"value": "{{name}}",
+											"type": "default"
+										},
+										{
+											"key": "status",
+											"value": "available",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/q*08",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										"q*08"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC2 Update existing Pet - without Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 415\", function () {\r",
+											"    pm.response.to.have.status(415);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/merge-patch+json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "petId",
+											"value": "{{petId}}",
+											"type": "default"
+										},
+										{
+											"key": "name",
+											"value": "{{name}}",
+											"type": "default"
+										},
+										{
+											"key": "status",
+											"value": "available",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetPet",
+					"item": [
+						{
+							"name": "TestPet-TC1 Get Pet - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Verify Id\r",
+											"pm.test(\"Verify Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.eql(parseInt(pm.variables.get(\"petId\")));\r",
+											"});\r",
+											"\r",
+											"//Check Category\r",
+											"pm.test(\"Category Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.category.id).to.eql(0);\r",
+											"});\r",
+											"pm.test(\"Category Name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.category.name).to.eql(pm.variables.get(\"categoryName\"));\r",
+											"});\r",
+											"\r",
+											"//Check Name\r",
+											"pm.test(\"Pet Name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.name).to.eql(pm.variables.get(\"name\"));\r",
+											"});\r",
+											"\r",
+											"//Check PhotoUrls\r",
+											"pm.test(\"PhotoUrls\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.photoUrls).to.include('string');\r",
+											"});\r",
+											"\r",
+											"//Check Tags\r",
+											"pm.test(\"Tags Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.tags[0].id).to.eql(0);\r",
+											"});\r",
+											"pm.test(\"Tags Name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.tags[0].name).to.eql('string');\r",
+											"});\r",
+											"\r",
+											"//Check Status\r",
+											"pm.test(\"Status\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql('available');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/{{petId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										"{{petId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetPet - Negative",
+					"item": [
+						{
+							"name": "TestPet-NegTC1 Get Pet using invalid Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/q*8",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										"q*8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-NegTC2 Get Pet without Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 405\", function () {\r",
+											"    pm.response.to.have.status(405);\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DeletePet",
+					"item": [
+						{
+							"name": "TestPet-TC1 Delete Pet - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/{{petId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										"{{petId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DeletePet - Negative",
+					"item": [
+						{
+							"name": "TestPet-TC1 Delete Pet using non-existent Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/q*8",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										"q*8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestPet-TC2 Delete Pet without Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 405\", function () {\r",
+											"    pm.response.to.have.status(405);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/pet/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"pet",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "OrderPet",
+					"item": [
+						{
+							"name": "TestStore-TC1 Order Pet - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Verify Id\r",
+											"pm.test(\"Verify Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.not.eql(undefined);\r",
+											"});\r",
+											"\r",
+											"//Check Pet Id\r",
+											"pm.test(\"Pet Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.petId).to.eql(parseInt(pm.variables.get(\"petId\")));\r",
+											"});\r",
+											"\r",
+											"//Check Quantity\r",
+											"pm.test(\"Quantity\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.quantity).to.eql(parseInt(pm.variables.get(\"quantity\")));\r",
+											"});\r",
+											"\r",
+											"//Check ShipDate\r",
+											"pm.test(\"ShipDate\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.shipDate).to.eql('2023-06-14T20:28:29.584+0000');\r",
+											"});\r",
+											"\r",
+											"//Check Status\r",
+											"pm.test(\"Status\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql('placed');\r",
+											"});\r",
+											"\r",
+											"//Check Complete\r",
+											"pm.test(\"Complete\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.complete).to.eql(true);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.globals.set('petId', Math.floor(Math.random() * 10));\r",
+											"pm.globals.set('quantity', 0);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"petId\": {{petId}},\r\n  \"quantity\": {{quantity}},\r\n  \"shipDate\": \"2023-06-14T20:28:29.584Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestStore-TC2 Order Pet without Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Verify Id\r",
+											"pm.test(\"Verify Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.not.eql(undefined);\r",
+											"});\r",
+											"\r",
+											"//Check Pet Id\r",
+											"pm.test(\"Pet Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.petId).to.eql(parseInt(pm.variables.get(\"petId\")));\r",
+											"});\r",
+											"\r",
+											"//Check Quantity\r",
+											"pm.test(\"Quantity\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.quantity).to.eql(parseInt(pm.variables.get(\"quantity\")));\r",
+											"});\r",
+											"\r",
+											"//Check ShipDate\r",
+											"pm.test(\"PhotoUrls\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.shipDate).to.include('023-06-14T20:28:29.584+0000');\r",
+											"});\r",
+											"\r",
+											"//Check Status\r",
+											"pm.test(\"Tags Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.status).to.eql('placed');\r",
+											"});\r",
+											"\r",
+											"//Check Complete\r",
+											"pm.test(\"Status\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.complete).to.eql(true);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.globals.set('petId', Math.floor(Math.random() * 10));\r",
+											"pm.globals.set('quantity', 0);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \r\n  \"petId\": {{petId}},\r\n  \"quantity\": {{quantity}},\r\n  \"shipDate\": \"2023-06-14T20:28:29.584Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "OrderPet - Negative",
+					"item": [
+						{
+							"name": "TestStore-NegTC1 Order Pet using invalid Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"q*8\",\r\n  \"petId\": 0,\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"2023-06-14T20:28:29.584Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestStore-NegTC2 Order Pet using invalid petId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"petId\": \"q*8\",\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"2023-06-14T20:28:29.584Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestStore-NegTC3 Order Pet using invalid quantity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"petId\": 0,\r\n  \"quantity\": \"q8\",\r\n  \"shipDate\": \"2023-06-14T20:28:29.584Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestStore-NegTC4 Order Pet using invalid shipDate",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"petId\": 0,\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"**\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestStore-NegTC5 Order Pet using invalid complete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"petId\": 0,\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"2023-06-14T20:28:29.584Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": \"truth\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/order",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"order"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetStore",
+					"item": [
+						{
+							"name": "TestStore-TC2 Get Store Inventory list",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/store/inventory",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"store",
+										"inventory"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CreateUser",
+					"item": [
+						{
+							"name": "TestUser-TC1 Create User - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CreateUser-Negative",
+					"item": [
+						{
+							"name": "TestUser-NegTC1 Create User using invalid Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"q8\",\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC2 Create User without Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC3 Create User using invalid Username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"**&&a##\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC4 Create User without Username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n \r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC5 Create User using invalid FirstName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"**&&a##\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC6 Create User using invalid LastName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"**&&a##\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC7 Create User using invalid Email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"**&&a##\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC8 Create User without Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC9 Create User using invalid Phone",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"**&&a##\",\r\n  \"userStatus\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC10 Create User using invalid UserStatus",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 10,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Mike\",\r\n  \"lastName\": \"Rand\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": \"**&\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LoginUser",
+					"item": [
+						{
+							"name": "TestUser-TC1 Login User - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Check Response\r",
+											"pm.test(\"Code\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"});\r",
+											"pm.test(\"Type\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.not.eql(undefined);\r",
+											"});\r",
+											"pm.test(\"Message\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.not.eql(undefined);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"Mike\",\r\n  \"password\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/login",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LoginUser-Negative",
+					"item": [
+						{
+							"name": "TestUser-NegTC1 Login User without Username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n  \"password\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/login",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC2 Login User without Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"Mike\"\r\n \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/login",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "UpdateUser",
+					"item": [
+						{
+							"name": "TestUser-TC1 Update User - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Check Response\r",
+											"pm.test(\"Code\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"});\r",
+											"pm.test(\"Type\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.not.eql(undefined);\r",
+											"});\r",
+											"pm.test(\"Message\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.not.eql(undefined);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"firstName\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/{{username}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"{{username}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "UpdateUser-Negative",
+					"item": [
+						{
+							"name": "TestUser-NegTC1 Update User using invalid Id on URL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"firstName\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/**&&a##",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"**&&a"
+									],
+									"hash": "#"
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC2 Update User using invalid Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"**&&a##\",\r\n  \"firstName\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/{{username}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"{{username}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-NegTC3 Update User using invalid FirstName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": 0,\r\n  \"firstName\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/{{username}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"{{username}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LogoutUser",
+					"item": [
+						{
+							"name": "TestUser-TC1 Logout User - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Check Response\r",
+											"pm.test(\"Code\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.code).to.eql(200);\r",
+											"});\r",
+											"pm.test(\"Type\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.type).to.not.eql(undefined);\r",
+											"});\r",
+											"pm.test(\"Message\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.not.eql(undefined);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/login",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DeleteUser",
+					"item": [
+						{
+							"name": "TestUser-TC1 Delete User - with all items from the request returned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/{{username}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"{{username}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DeleteUser-Negative",
+					"item": [
+						{
+							"name": "TestUser-TC1 Delete User using non-existent Username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/Hpw1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										"Hpw1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TestUser-TC2 Delete User without Username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 405\", function () {\r",
+											"    pm.response.to.have.status(405);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/user/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"user",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://petstore.swagger.io/v2",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "string",
+			"type": "string"
+		},
+		{
+			"key": "name",
+			"value": "dogg",
+			"type": "default"
+		}
+	]
+}
